@@ -19,4 +19,26 @@ export class TransactionService {
   getAllTransactions(): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(this.apiUrl);
   }
+  getTransactionsByDate(date: Date): Observable<Transaction[]> {
+
+    const formattedDate = this.formatDate(date);
+
+    const url = `${this.apiUrl}?date=${formattedDate}`;
+
+    return this.http.get<Transaction[]>(url);
+
+  }
+
+
+  private formatDate(date: Date): string {
+
+    const year = date.getFullYear();
+
+    const month = date.getMonth() + 1;
+
+    const day = date.getDate();
+
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+  }
 }

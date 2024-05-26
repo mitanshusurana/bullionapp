@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 import { AppRoutingModule } from './app.routes';
 import { AppComponent } from './app.component';
@@ -41,6 +42,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MatButtonModule,
     MatSelectModule,
     MatTableModule,
+    MatDatepicker,
     AppRoutingModule
   ],
   providers: [PrintService, provideAnimationsAsync()],
