@@ -1,1 +1,18 @@
-<p>party-balance works!</p>
+<!-- src/app/components/party-balance/party-balance.component.html -->
+<h2>Party Balances</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Party</th>
+      <th>Cash Balance</th>
+      <th>Metal Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let party of parties">
+      <td>{{ party.name }}</td>
+      <td>{{ party.cashBalance }}</td>
+      <td>{{ party.metalBalance }}</td>
+    </tr>
+  </tbody>
+</table>

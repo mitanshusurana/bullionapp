@@ -1,1 +1,27 @@
-<p>party-ledger works!</p>
+<!-- src/app/components/party-ledger/party-ledger.component.html -->
+<h2>Party Ledger</h2>
+<div *ngIf="party">
+  <h3>{{ party.name }}</h3>
+  <p>Cash Balance: {{ party.cashBalance }}</p>
+  <p>Metal Balance: {{ party.metalBalance }}</p>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Metal Quantity</th>
+      <th>Cash Amount</th>
+      <th>Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let transaction of transactions">
+      <td>{{ transaction.date }}</td>
+      <td>{{ transaction.type }}</td>
+      <td>{{ transaction.metalQuantity }}</td>
+      <td>{{ transaction.cashAmount }}</td>
+      <td>{{ transaction.rate }}</td>
+    </tr>
+  </tbody>
+</table>

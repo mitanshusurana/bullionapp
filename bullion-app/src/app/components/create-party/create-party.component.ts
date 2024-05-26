@@ -1,28 +1,25 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatTableModule, MatTable } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { MatSortModule, MatSort } from '@angular/material/sort';
-import { CreatePartyDataSource, CreatePartyItem } from './create-party-datasource';
+// src/app/components/create-party/create-party.component.ts
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { PartyService } from '../../services/party.service';
+import { Party } from '../../models/party';
 
 @Component({
   selector: 'app-create-party',
   templateUrl: './create-party.component.html',
-  styleUrl: './create-party.component.css',
-  standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatSortModule]
+  styleUrls: ['./create-party.component.css']
 })
-export class CreatePartyComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<CreatePartyItem>;
-  dataSource = new CreatePartyDataSource();
+export class CreatePartyComponent {
+  party: Party = { id: 0, name: '', cashBalance: 0, metalBalance: 0 };
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  constructor(private partyService: PartyService) {}
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      this.partyService.createParty(this.party).subscribe(response => {
+        console.log('Party created:', response);
+        form.resetForm();
+      });
+    }
   }
 }

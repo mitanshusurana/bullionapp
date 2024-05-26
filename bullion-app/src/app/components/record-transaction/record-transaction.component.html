@@ -1,1 +1,25 @@
-<p>record-transaction works!</p>
+<!-- src/app/components/record-transaction/record-transaction.component.html -->
+<form #transactionForm="ngForm" (ngSubmit)="onSubmit(transactionForm)">
+    <mat-form-field>
+      <mat-select placeholder="Party" [(ngModel)]="transaction.party" name="party" required>
+        <mat-option *ngFor="let party of parties" [value]="party">{{ party.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Date" [(ngModel)]="transaction.date" name="date" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Type" [(ngModel)]="transaction.type" name="type" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Metal Quantity" [(ngModel)]="transaction.metalQuantity" name="metalQuantity" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Cash Amount" [(ngModel)]="transaction.cashAmount" name="cashAmount" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Rate" [(ngModel)]="transaction.rate" name="rate" required>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Record Transaction</button>
+  </form>
+  

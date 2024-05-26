@@ -1,1 +1,24 @@
-<p>daily-transactions works!</p>
+<!-- src/app/components/daily-transactions/daily-transactions.component.html -->
+<h2>Daily Transactions</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Party</th>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Metal Quantity</th>
+      <th>Cash Amount</th>
+      <th>Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let transaction of transactions">
+      <td>{{ transaction.party.name }}</td>
+      <td>{{ transaction.date }}</td>
+      <td>{{ transaction.type }}</td>
+      <td>{{ transaction.metalQuantity }}</td>
+      <td>{{ transaction.cashAmount }}</td>
+      <td>{{ transaction.rate }}</td>
+    </tr>
+  </tbody>
+</table>
