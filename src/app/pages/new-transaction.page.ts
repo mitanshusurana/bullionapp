@@ -133,7 +133,7 @@ import { PartyService } from "../services/party.service";
                   *ngIf="missingParty()"
                   [routerLink]="['/party/new']"
                   [queryParams]="{ name: form.controls.name.value }"
-                  (mousedown)="$event.stopPropagation()"
+                  (mousedown)="$event.preventDefault()"
                   class="block px-3 py-2 text-sm text-brand-700 hover:bg-slate-50"
                   >Create "{{ form.controls.name.value }}"</a
                 >
