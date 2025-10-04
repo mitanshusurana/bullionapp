@@ -380,8 +380,9 @@ export class NewTransactionPageComponent {
 
   showSuggestions = signal(false);
   private hideTimer: any;
+  readonly searchQuery = signal<string>("");
   readonly filteredNames = computed(() => {
-    const q = (this.form?.controls.name.value || "").toLowerCase().trim();
+    const q = this.searchQuery().toLowerCase().trim();
     const list = this.names();
     if (!q) return list.slice(0, 8);
     return list.filter((n) => n.toLowerCase().includes(q)).slice(0, 8);
@@ -420,6 +421,11 @@ export class NewTransactionPageComponent {
       const q = this.route.snapshot.queryParamMap;
       const t = (q.get("type") as TxType) || "sale";
       this.setType(t);
+    });
+
+    // Track name input for filtering
+    this.form.controls.name.valueChanges.subscribe((value) => {
+      this.searchQuery.set(value || "");
     });
 
     // Auto calculations
