@@ -1,4 +1,6 @@
-import { Injectable, computed, signal } from "@angular/core";
+import { Injectable, computed, signal, inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { API_BASE } from "./party.service";
 
 export type TxType =
   | "sale"
@@ -108,5 +110,16 @@ export class TransactionService {
     } catch {
       // ignore
     }
+  }
+
+  // API: GET /api/transactions
+  private readonly http = inject(HttpClient);
+  fetchAll() {
+    return this.http.get<Transaction[]>(`${API_BASE}/transactions`);
+  }
+
+  // API: GET /api/transactions?party=Name
+  fetchByParty(name: string) {
+    return this.http.get<Transaction[]>(`${API_BASE}/transactions`, { params: { party: name } });
   }
 }

@@ -107,33 +107,42 @@ import { PartyService } from "../services/party.service";
                 (blur)="closeSuggestionsLater()"
                 formControlName="name"
                 type="text"
+                autocomplete="off"
+                autocapitalize="off"
+                autocorrect="off"
+                spellcheck="false"
                 placeholder="Customer / Supplier"
                 class="w-full rounded-xl border border-slate-300 bg-white p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
               <div
-                *ngIf="showSuggestions() && (filteredNames().length || missingParty())"
-                class="absolute z-20 left-0 right-0 mt-1 rounded-xl border border-slate-200 bg-white shadow-soft overflow-hidden"
+                *ngIf="showSuggestions()"
+                class="absolute z-50 left-0 right-0 mt-1 max-h-64 overflow-auto rounded-xl border border-slate-200 bg-white shadow-soft"
               >
-                <button
-                  *ngIf="filteredNames().length"
-                  type="button"
-                  class="w-full text-left px-3 py-2 text-xs text-slate-500 border-b border-slate-100"
-                >
-                  Select a party
-                </button>
-                <button
+                <ng-container *ngIf="filteredNames().length; else noMatch">
+                  <button
+                    type="button"
+                    class="w-full text-left px-3 py-2 text-xs text-slate-500 border-b border-slate-100"
+                  >
+                    Select a party
+                  </button>
+                  <button
                   type="button"
                   *ngFor="let n of filteredNames()"
                   (mousedown)="selectName(n)"
+                  (click)="selectName(n)"
                   class="w-full px-3 py-2 text-sm hover:bg-slate-50"
                 >
-                  {{ n }}
-                </button>
+                    {{ n }}
+                  </button>
+                </ng-container>
+                <ng-template #noMatch>
+                  <div class="px-3 py-2 text-sm text-slate-500">No matches</div>
+                </ng-template>
                 <a
                   *ngIf="missingParty()"
                   [routerLink]="['/party/new']"
                   [queryParams]="{ name: form.controls.name.value }"
-                  (mousedown)="$event.preventDefault()"
+                  (mousedown)="$event.stopPropagation()"
                   class="block px-3 py-2 text-sm text-brand-700 hover:bg-slate-50"
                   >Create "{{ form.controls.name.value }}"</a
                 >
@@ -376,13 +385,13 @@ export class NewTransactionPageComponent {
   private readonly partyService = inject(PartyService);
 
   readonly type = signal<TxType>("sale");
-  readonly names = this.partyService.names;
+  readonly names = this.partyService.allNames;
 
   showSuggestions = signal(false);
   private hideTimer: any;
-  readonly searchQuery = signal<string>("");
+  private nameQuery = signal("");
   readonly filteredNames = computed(() => {
-    const q = this.searchQuery().toLowerCase().trim();
+    const q = this.nameQuery();
     const list = this.names();
     if (!q) return list.slice(0, 8);
     return list.filter((n) => n.toLowerCase().includes(q)).slice(0, 8);
@@ -420,16 +429,20 @@ export class NewTransactionPageComponent {
     effect(() => {
       const q = this.route.snapshot.queryParamMap;
       const t = (q.get("type") as TxType) || "sale";
+      const preName = q.get('name');
       this.setType(t);
+      if (preName) {
+        this.form.controls.name.setValue(preName);
+        this.nameQuery.set(preName.toLowerCase());
+      }
     });
 
-    // Track name input for filtering
-    this.form.controls.name.valueChanges.subscribe((value) => {
-      this.searchQuery.set(value || "");
-    });
-
-    // Auto calculations
+    // Auto calculations and suggestions
     this.form.valueChanges.subscribe(() => {
+      const q = (this.form.controls.name.value || '').toLowerCase().trim();
+      this.nameQuery.set(q);
+      if (q) { this.showSuggestions.set(true); }
+
       const g = Number(this.form.controls.grossWt.value) || 0;
       const p = Number(this.form.controls.purity.value) || 0;
       const rate = Number(this.form.controls.rate.value) || 0;
