@@ -1,0 +1,42 @@
+<div class="min-h-screen bg-slate-50">
+  <router-outlet></router-outlet>
+
+  <!-- Bottom nav -->
+  <nav
+    class="fixed inset-x-0 bottom-0 z-30 bg-white/90 backdrop-blur border-t border-slate-200"
+  >
+    <div class="max-w-md mx-auto grid grid-cols-3">
+      <a
+        [routerLink]="['/']"
+        routerLinkActive="text-brand-700"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex flex-col items-center justify-center py-3 text-slate-600 hover:text-slate-900"
+      >
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+        </svg>
+        <span class="text-xs font-medium">Home</span>
+      </a>
+      <a
+        [routerLink]="['/parties']"
+        routerLinkActive="text-brand-700"
+        class="flex flex-col items-center justify-center py-3 text-slate-600 hover:text-slate-900"
+      >
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
+          <path d="M12 12a5 5 0 110-10 5 5 0 010 10zm-9 9a9 9 0 1118 0H3z" />
+        </svg>
+        <span class="text-xs font-medium">Parties</span>
+      </a>
+      <a
+        [routerLink]="['/transaction/new']"
+        routerLinkActive="text-brand-700"
+        class="flex flex-col items-center justify-center py-3 text-slate-600 hover:text-slate-900"
+      >
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
+          <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6z" />
+        </svg>
+        <span class="text-xs font-medium">New</span>
+      </a>
+    </div>
+  </nav>
+</div>
