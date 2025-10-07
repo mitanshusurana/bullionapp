@@ -2,6 +2,7 @@ import { Injectable, computed, signal, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { API_BASE } from "./party.service";
 import { v4 as uuidv4 } from "uuid";
+import { SyncService } from "./sync.service";
 
 export type TxType =
   | "sale"
