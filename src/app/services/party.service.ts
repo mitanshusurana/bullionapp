@@ -1,5 +1,6 @@
 import { Injectable, signal, inject, computed } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { SyncService } from "./sync.service";
 
 export interface Party {
   name: string;
@@ -16,6 +17,7 @@ export const API_BASE = "/api";
 @Injectable({ providedIn: "root" })
 export class PartyService {
   private readonly http = inject(HttpClient);
+  private readonly sync = inject(SyncService);
 
   private readonly _parties = signal<Party[]>(this.load());
   readonly parties = this._parties.asReadonly();
@@ -32,6 +34,18 @@ export class PartyService {
   constructor() {
     this.ensureFreshNames("app_open");
     setInterval(() => this.ensureFreshNames("timer"), TEN_MIN);
+
+    // Load parties from backend as source-of-truth, cache locally
+    this.fetchParties().subscribe({
+      next: (list) => {
+        const valid = Array.isArray(list) ? list.filter(Boolean) : [];
+        this._parties.set(valid);
+        this.persist(valid);
+      },
+      error: () => {
+        // keep cached local parties on error
+      }
+    });
   }
 
   add(input: Omit<Party, "createdAt">) {
@@ -39,9 +53,32 @@ export class PartyService {
       ...input,
       createdAt: new Date().toISOString(),
     };
+    // Optimistic add
     const next = [party, ...this._parties()];
     this._parties.set(next);
     this.persist(next);
+
+    // Try to persist to backend; on failure, enqueue for retry
+    this.http.post<Party>(`${API_BASE}/parties`, party).subscribe({
+      next: (saved) => {
+        if (!saved) return;
+        // Replace with server's canonical data if returned
+        const list = this._parties();
+        const idx = list.findIndex((p) => p.name.toLowerCase() === party.name.toLowerCase());
+        if (idx !== -1) {
+          const updated = [...list];
+          updated[idx] = { ...party, ...saved };
+          this._parties.set(updated);
+          this.persist(updated);
+        }
+      },
+      error: () => {
+        this.sync.enqueue("POST", `${API_BASE}/parties`, party);
+      },
+    });
+
+    // Refresh names cache
+    this.ensureFreshNames("new_party");
     return party;
   }
 
