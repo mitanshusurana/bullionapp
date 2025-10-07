@@ -95,7 +95,7 @@ export class TransactionService {
         this.persist(updated);
       },
       error: () => {
-        // Ignore for now; local optimistic state remains. Consider retry logic in future.
+        this.sync.enqueue("POST", `${API_BASE}/transactions`, tx);
       },
     });
 
