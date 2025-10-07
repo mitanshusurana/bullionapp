@@ -156,6 +156,8 @@ export class TransactionService {
 
   // API: GET /api/transactions?party=Name
   fetchByParty(name: string) {
-    return this.http.get<Transaction[]>(`${API_BASE}/transactions`, { params: { party: name } });
+    return this.http.get<Transaction[]>(`${API_BASE}/transactions`, {
+      params: { party: name },
+    });
   }
 }

@@ -24,10 +24,11 @@ export class PartyService {
 
   private readonly _names = signal<string[]>(this.loadNamesCache().names);
   readonly names = this._names.asReadonly();
-  readonly allNames = computed(() => Array.from(new Set([
-    ...this._names(),
-    ...this._parties().map(p => p.name)
-  ])).sort((a,b)=>a.localeCompare(b)));
+  readonly allNames = computed(() =>
+    Array.from(
+      new Set([...this._names(), ...this._parties().map((p) => p.name)]),
+    ).sort((a, b) => a.localeCompare(b)),
+  );
 
   private lastNamesFetch = this.loadNamesCache().ts;
 
@@ -44,7 +45,7 @@ export class PartyService {
       },
       error: () => {
         // keep cached local parties on error
-      }
+      },
     });
   }
 
@@ -64,7 +65,9 @@ export class PartyService {
         if (!saved) return;
         // Replace with server's canonical data if returned
         const list = this._parties();
-        const idx = list.findIndex((p) => p.name.toLowerCase() === party.name.toLowerCase());
+        const idx = list.findIndex(
+          (p) => p.name.toLowerCase() === party.name.toLowerCase(),
+        );
         if (idx !== -1) {
           const updated = [...list];
           updated[idx] = { ...party, ...saved };

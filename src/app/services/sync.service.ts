@@ -37,9 +37,16 @@ export class SyncService {
     }
   }
 
-  enqueue(method: OutboxMethod, url: string, body?: any, headers?: Record<string, string>) {
+  enqueue(
+    method: OutboxMethod,
+    url: string,
+    body?: any,
+    headers?: Record<string, string>,
+  ) {
     const item: OutboxItem = {
-      id: crypto?.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      id: crypto?.randomUUID
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       method,
       url,
       body,
