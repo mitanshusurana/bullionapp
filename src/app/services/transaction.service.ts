@@ -48,6 +48,7 @@ const STORAGE_KEY = "gold-pos:transactions";
 @Injectable({ providedIn: "root" })
 export class TransactionService {
   private readonly _transactions = signal<Transaction[]>(this.load());
+  private readonly sync = inject(SyncService);
 
   readonly transactions = this._transactions.asReadonly();
 
