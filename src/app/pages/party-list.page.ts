@@ -27,7 +27,7 @@ import { PartyService } from '../services/party.service';
       <div *ngIf="!parties().length" class="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500">No parties yet. Create one.</div>
 
       <div class="space-y-2">
-        <a *ngFor="let p of parties()" [routerLink]="['/parties', p.id]" class="block rounded-xl bg-white shadow-soft p-4">
+        <a *ngFor="let p of parties()" [routerLink]="['/parties', p.name]" class="block rounded-xl bg-white shadow-soft p-4">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-semibold text-slate-900">{{ p.name }}</p>
