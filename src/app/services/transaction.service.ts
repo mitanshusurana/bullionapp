@@ -74,9 +74,29 @@ export class TransactionService {
       id: uuidv4(),
       createdAt: new Date().toISOString(),
     };
+
+    // Optimistically update local store
     const next = [tx, ...this._transactions()];
     this._transactions.set(next);
     this.persist(next);
+
+    // Send to backend (fire-and-forget). If backend returns a different payload/id, reconcile local state.
+    this.http.post<Transaction>(`${API_BASE}/transactions`, tx).subscribe({
+      next: (saved) => {
+        if (!saved) return;
+        const list = this._transactions();
+        const idx = list.findIndex((t) => t.id === tx.id);
+        if (idx === -1) return;
+        const updated = [...list];
+        updated[idx] = { ...tx, ...saved };
+        this._transactions.set(updated);
+        this.persist(updated);
+      },
+      error: () => {
+        // Ignore for now; local optimistic state remains. Consider retry logic in future.
+      },
+    });
+
     return tx;
   }
 
