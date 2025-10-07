@@ -1,6 +1,7 @@
 import { Injectable, computed, signal, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { API_BASE } from "./party.service";
+import { v4 as uuidv4 } from "uuid";
 
 export type TxType =
   | "sale"
@@ -68,7 +69,6 @@ export class TransactionService {
   });
 
   add(input: Omit<Transaction, "id" | "createdAt">) {
-    const { v4: uuidv4 } = require('uuid');
     const tx: Transaction = {
       ...input,
       id: uuidv4(),
