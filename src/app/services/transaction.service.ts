@@ -137,6 +137,19 @@ export class TransactionService {
 
   // API: GET /api/transactions
   private readonly http = inject(HttpClient);
+  constructor() {
+    // Load from backend as source-of-truth; cache locally
+    this.fetchAll().subscribe({
+      next: (list) => {
+        const valid = Array.isArray(list) ? list.filter(Boolean) : [];
+        this._transactions.set(valid);
+        this.persist(valid);
+      },
+      error: () => {
+        // keep cached local transactions on error
+      },
+    });
+  }
   fetchAll() {
     return this.http.get<Transaction[]>(`${API_BASE}/transactions`);
   }
