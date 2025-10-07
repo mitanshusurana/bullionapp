@@ -68,9 +68,10 @@ export class TransactionService {
   });
 
   add(input: Omit<Transaction, "id" | "createdAt">) {
+    const { v4: uuidv4 } = require('uuid');
     const tx: Transaction = {
       ...input,
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       createdAt: new Date().toISOString(),
     };
     const next = [tx, ...this._transactions()];
