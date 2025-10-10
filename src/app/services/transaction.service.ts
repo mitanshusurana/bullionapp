@@ -1,6 +1,8 @@
 import { Injectable, computed, signal, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { API_BASE } from "./party.service";
+import { v4 as uuidv4 } from "uuid";
+import { SyncService } from "./sync.service";
 
 export type TxType =
   | "sale"
@@ -46,6 +48,7 @@ const STORAGE_KEY = "gold-pos:transactions";
 @Injectable({ providedIn: "root" })
 export class TransactionService {
   private readonly _transactions = signal<Transaction[]>(this.load());
+  private readonly sync = inject(SyncService);
 
   readonly transactions = this._transactions.asReadonly();
 
@@ -70,12 +73,32 @@ export class TransactionService {
   add(input: Omit<Transaction, "id" | "createdAt">) {
     const tx: Transaction = {
       ...input,
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       createdAt: new Date().toISOString(),
     };
+
+    // Optimistically update local store
     const next = [tx, ...this._transactions()];
     this._transactions.set(next);
     this.persist(next);
+
+    // Send to backend (fire-and-forget). If backend returns a different payload/id, reconcile local state.
+    this.http.post<Transaction>(`${API_BASE}/transactions`, tx).subscribe({
+      next: (saved) => {
+        if (!saved) return;
+        const list = this._transactions();
+        const idx = list.findIndex((t) => t.id === tx.id);
+        if (idx === -1) return;
+        const updated = [...list];
+        updated[idx] = { ...tx, ...saved };
+        this._transactions.set(updated);
+        this.persist(updated);
+      },
+      error: () => {
+        this.sync.enqueue("POST", `${API_BASE}/transactions`, tx);
+      },
+    });
+
     return tx;
   }
 
@@ -114,12 +137,27 @@ export class TransactionService {
 
   // API: GET /api/transactions
   private readonly http = inject(HttpClient);
+  constructor() {
+    // Load from backend as source-of-truth; cache locally
+    this.fetchAll().subscribe({
+      next: (list) => {
+        const valid = Array.isArray(list) ? list.filter(Boolean) : [];
+        this._transactions.set(valid);
+        this.persist(valid);
+      },
+      error: () => {
+        // keep cached local transactions on error
+      },
+    });
+  }
   fetchAll() {
     return this.http.get<Transaction[]>(`${API_BASE}/transactions`);
   }
 
   // API: GET /api/transactions?party=Name
   fetchByParty(name: string) {
-    return this.http.get<Transaction[]>(`${API_BASE}/transactions`, { params: { party: name } });
+    return this.http.get<Transaction[]>(`${API_BASE}/transactions`, {
+      params: { party: name },
+    });
   }
 }

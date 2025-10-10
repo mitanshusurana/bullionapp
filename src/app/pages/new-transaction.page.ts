@@ -138,14 +138,15 @@ import { PartyService } from "../services/party.service";
                 <ng-template #noMatch>
                   <div class="px-3 py-2 text-sm text-slate-500">No matches</div>
                 </ng-template>
-                <a
+                <button
                   *ngIf="missingParty()"
-                  [routerLink]="['/party/new']"
-                  [queryParams]="{ name: form.controls.name.value }"
-                  (mousedown)="$event.stopPropagation()"
-                  class="block px-3 py-2 text-sm text-brand-700 hover:bg-slate-50"
-                  >Create "{{ form.controls.name.value }}"</a
+                  type="button"
+                  (mousedown)="$event.preventDefault()"
+                  (click)="createPartyFromName()"
+                  class="block w-full text-left px-3 py-2 text-sm text-brand-700 hover:bg-slate-50"
                 >
+                  Create "{{ form.controls.name.value }}"
+                </button>
               </div>
               <div class="mt-1 flex items-center gap-3">
                 <span
@@ -475,11 +476,17 @@ export class NewTransactionPageComponent {
     }
   }
   closeSuggestionsLater() {
-    this.hideTimer = setTimeout(() => this.showSuggestions.set(false), 100);
+    this.hideTimer = setTimeout(() => this.showSuggestions.set(false), 250);
   }
   selectName(n: string) {
     this.form.controls.name.setValue(n);
     this.showSuggestions.set(false);
+  }
+
+  createPartyFromName() {
+    const name = (this.form.controls.name.value || '').trim();
+    if (!name) return;
+    this.router.navigate(["/party/new"], { queryParams: { name } });
   }
 
   missingParty(): boolean {
