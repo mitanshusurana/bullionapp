@@ -14,6 +14,7 @@ export interface DaybookEntry {
   purity?: number;
   rate?: number;
   note?: string;
+  balance?: number;
   createdAt: string; // ISO
 }
 

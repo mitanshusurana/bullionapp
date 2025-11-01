@@ -1,9 +1,12 @@
 package com.example.bullion.service;
 
 
+import com.example.bullion.model.DaybookResponse;
 import com.example.bullion.model.Transaction;
 import com.example.bullion.model.User;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface Service {
@@ -16,4 +19,6 @@ public interface Service {
     List<Transaction> getAllTransaction();
 
     List<Transaction> getAllTransactionById(String party);
+
+  DaybookResponse getDaybook(LocalDate date);
 }
