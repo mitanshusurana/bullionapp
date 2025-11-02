@@ -108,9 +108,64 @@ export class DaybookPageComponent {
 
   private fetch() {
     this.reports.getDaybook(this.date()).subscribe({
-      next: (d) => this.data.set(d),
-      error: () => this.data.set({ date: this.date(), entries: [], totals: { sale: 0, purchase: 0, cashin: 0, cashout: 0, net: 0 } })
+      next: (d) => {
+        this.data.set(d);
+        this.updateFilteredEntries();
+      },
+      error: () => {
+        this.data.set({ date: this.date(), entries: [], totals: { sale: 0, purchase: 0, cashin: 0, cashout: 0, net: 0 } });
+        this.updateFilteredEntries();
+      }
     });
+  }
+
+  private updateFilteredEntries() {
+    const entries = this.data()?.entries || [];
+    const query = this.searchQuery().toLowerCase().trim();
+    const types = this.selectedTypes();
+
+    const filtered = entries.filter(entry => {
+      // Filter by type
+      if (types.size > 0 && !types.has(entry.type)) {
+        return false;
+      }
+
+      // Filter by search query
+      if (query) {
+        const searchable = [
+          entry.name || '',
+          entry.note || '',
+          entry.type
+        ].join(' ').toLowerCase();
+        if (!searchable.includes(query)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    this.filteredEntries.set(filtered);
+  }
+
+  onSearch(query: string) {
+    this.searchQuery.set(query);
+    this.updateFilteredEntries();
+  }
+
+  toggleType(type: string) {
+    const types = new Set(this.selectedTypes());
+    if (types.has(type)) {
+      types.delete(type);
+    } else {
+      types.add(type);
+    }
+    this.selectedTypes.set(types);
+    this.updateFilteredEntries();
+  }
+
+  isTypeSelected(type: string): boolean {
+    return this.selectedTypes().has(type);
   }
 
   today() {
