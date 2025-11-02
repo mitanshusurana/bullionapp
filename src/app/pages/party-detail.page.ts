@@ -88,6 +88,17 @@ import { of } from 'rxjs';
             No transactions for this party.
           </div>
         </ng-template>
+
+        <!-- Load More Button -->
+        <div *ngIf="hasMore() && getFilteredTransactions(loadedTransactions())?.length" class="mt-4 text-center">
+          <button
+            (click)="loadMore()"
+            [disabled]="isLoading()"
+            class="px-6 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-900 disabled:opacity-50 transition"
+          >
+            {{ isLoading() ? 'Loading...' : 'Load More' }}
+          </button>
+        </div>
       </section>
     </main>
 
