@@ -1,6 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, computed, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
+import { PartyService } from "../services/party.service";
 
 @Component({
   selector: "app-home-page",
