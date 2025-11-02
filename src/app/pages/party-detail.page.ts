@@ -120,8 +120,15 @@ export class PartyDetailPageComponent {
   readonly selectedTypes = signal<Set<string>>(new Set());
   readonly filteredTxs = signal<any[]>([]);
 
+  readonly currentPage = signal(0);
+  readonly pageSize = signal(10);
+  readonly hasMore = signal(true);
+  readonly loadedTransactions = signal<any[]>([]);
+  readonly isLoading = signal(false);
+
   constructor() {
     this.refreshPartyData();
+    this.loadTransactions();
 
     effect(() => {
       this.updateFilteredTransactions();
