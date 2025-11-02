@@ -98,6 +98,14 @@ export class PartyDetailPageComponent {
 
   readonly selectedTx = signal<any | null>(null);
 
+  constructor() {
+    this.refreshPartyData();
+  }
+
+  private refreshPartyData() {
+    this.parties.ensureFreshNames('timer');
+  }
+
   openTxDetail(tx: any) {
     this.selectedTx.set(tx);
   }
