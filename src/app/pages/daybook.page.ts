@@ -74,28 +74,10 @@ import { TransactionDetailModalComponent } from '../components/transaction-detai
     </main>
 
     <!-- Transaction Details Modal -->
-    <div *ngIf="selectedTransaction" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
-        <button (click)="closeModal()"
-                class="absolute top-2 right-2 text-slate-500 hover:text-slate-900 text-2xl font-bold">&times;</button>
-        <h2 class="text-lg font-semibold mb-4">Transaction Details</h2>
-        <div class="space-y-2 text-sm text-slate-700">
-          <p><strong>Type:</strong> {{ selectedTransaction.type }}</p>
-          <p><strong>Name:</strong> {{ selectedTransaction.name }}</p>
-          <p><strong>Date:</strong> {{ selectedTransaction.createdAt }}</p>
-          <p><strong>Gross Weight:</strong> {{ selectedTransaction.grossWt }}</p>
-          <p><strong>Purity:</strong> {{ selectedTransaction.purity }}</p>
-          <p><strong>Net Weight:</strong> {{ selectedTransaction.netWt }}</p>
-          <p><strong>Rate:</strong> {{ selectedTransaction.rate }}</p>
-          <p><strong>Amount:</strong> {{ selectedTransaction.amount | currency:'INR':'symbol' }}</p>
-          <p><strong>Cash In:</strong> {{ selectedTransaction.cashIn | currency:'INR':'symbol' }}</p>
-          <p><strong>Cash Out:</strong> {{ selectedTransaction.cashOut | currency:'INR':'symbol' }}</p>
-          <p><strong>Balance:</strong> {{ selectedTransaction.balance | currency:'INR':'symbol' }}</p>
-          <p><strong>Note:</strong> {{ selectedTransaction.note || '-' }}</p>
-          <p><strong>Created At:</strong> {{ selectedTransaction.createdAt | date:'short' }}</p>
-        </div>
-      </div>
-    </div>
+    <app-transaction-detail-modal
+      [transaction]="selectedTransaction"
+      (close)="closeModal()">
+    </app-transaction-detail-modal>
   </div>
   `
 })
