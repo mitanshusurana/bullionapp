@@ -176,11 +176,11 @@ import { ReportsService } from "../services/reports.service";
           <div class="grid grid-cols-2 gap-3">
             <div class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-4">
               <p class="text-xs text-blue-700 font-medium">Total Cash Balance</p>
-              <p class="mt-2 text-2xl font-semibold text-blue-900">{{ totalCash() | currency:'INR':'symbol':'1.0-0' }}</p>
+              <p class="mt-2 text-2xl font-semibold text-blue-900">{{ inventory().totalCash | currency:'INR':'symbol':'1.0-0' }}</p>
             </div>
             <div class="rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 p-4">
               <p class="text-xs text-amber-700 font-medium">Total Metal Balance</p>
-              <p class="mt-2 text-2xl font-semibold text-amber-900">{{ totalMetal() | number:'1.3-3' }} g</p>
+              <p class="mt-2 text-2xl font-semibold text-amber-900">{{ inventory().totalMetal | number:'1.3-3' }} g</p>
             </div>
           </div>
         </section>
