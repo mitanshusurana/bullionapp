@@ -219,10 +219,6 @@ export class DaybookPageComponent {
     this.updateFilteredEntries();
   }
 
-  constructor() {
-    this.fetch();
-  }
-
   onDate(e: Event) {
     const v = (e.target as HTMLInputElement).value;
     this.date.set(v);

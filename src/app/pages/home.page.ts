@@ -63,7 +63,7 @@ import { ReportsService } from "../services/reports.service";
             </div>
           </a>
           <a
-            [routerLink]="['/pl-book']"
+            [routerLink]="['/pl']"
             class="group rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-4 flex flex-col items-start gap-2"
           >
             <div class="p-2 rounded-lg bg-purple-600 text-white">
@@ -176,9 +176,6 @@ import { ReportsService } from "../services/reports.service";
 
         <!-- Inventory Summary -->
         <section class="mt-8 pt-6 border-t border-slate-200">
-          <h2 class="text-sm font-semibold text-slate-700 mb-3">
-            Inventory Summary
-          </h2>
           <div class="grid grid-cols-2 gap-3">
             <div
               class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-4"
