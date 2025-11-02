@@ -52,7 +52,9 @@ import { ReportsService } from "../services/reports.service";
           >
             <div class="p-2 rounded-lg bg-indigo-600 text-white">
               <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-9h-4v4h4v-4z" />
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-9h-4v4h4v-4z"
+                />
               </svg>
             </div>
             <div>
@@ -66,7 +68,9 @@ import { ReportsService } from "../services/reports.service";
           >
             <div class="p-2 rounded-lg bg-purple-600 text-white">
               <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-3-10h-2v4h2v-4zm-4 0H9v4h2v-4z" />
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-3-10h-2v4h2v-4zm-4 0H9v4h2v-4z"
+                />
               </svg>
             </div>
             <div>
@@ -172,19 +176,34 @@ import { ReportsService } from "../services/reports.service";
 
         <!-- Inventory Summary -->
         <section class="mt-8 pt-6 border-t border-slate-200">
-          <h2 class="text-sm font-semibold text-slate-700 mb-3">Inventory Summary</h2>
+          <h2 class="text-sm font-semibold text-slate-700 mb-3">
+            Inventory Summary
+          </h2>
           <div class="grid grid-cols-2 gap-3">
-            <div class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-4">
-              <p class="text-xs text-blue-700 font-medium">Total Cash Balance</p>
-              <p class="mt-2 text-2xl font-semibold text-blue-900">{{ inventory().totalCash | currency:'INR':'symbol':'1.0-0' }}</p>
+            <div
+              class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-4"
+            >
+              <p class="text-xs text-blue-700 font-medium">
+                Total Cash Balance
+              </p>
+              <p class="mt-2 text-2xl font-semibold text-blue-900">
+                {{
+                  inventory().totalCash | currency: "INR" : "symbol" : "1.0-0"
+                }}
+              </p>
             </div>
-            <div class="rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 p-4">
-              <p class="text-xs text-amber-700 font-medium">Total Metal Balance</p>
-              <p class="mt-2 text-2xl font-semibold text-amber-900">{{ inventory().totalMetal | number:'1.3-3' }} g</p>
+            <div
+              class="rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 p-4"
+            >
+              <p class="text-xs text-amber-700 font-medium">
+                Total Metal Balance
+              </p>
+              <p class="mt-2 text-2xl font-semibold text-amber-900">
+                {{ inventory().totalMetal | number: "1.3-3" }} g
+              </p>
             </div>
           </div>
         </section>
-
       </main>
 
       <a
@@ -202,7 +221,10 @@ import { ReportsService } from "../services/reports.service";
 export class HomePageComponent {
   private readonly reports = inject(ReportsService);
 
-  readonly inventory = signal<{ totalCash: number; totalMetal: number }>({ totalCash: 0, totalMetal: 0 });
+  readonly inventory = signal<{ totalCash: number; totalMetal: number }>({
+    totalCash: 0,
+    totalMetal: 0,
+  });
 
   constructor() {
     this.fetchInventory();
@@ -211,7 +233,7 @@ export class HomePageComponent {
   private fetchInventory() {
     this.reports.getInventory().subscribe({
       next: (data) => this.inventory.set(data),
-      error: () => this.inventory.set({ totalCash: 0, totalMetal: 0 })
+      error: () => this.inventory.set({ totalCash: 0, totalMetal: 0 }),
     });
   }
 }

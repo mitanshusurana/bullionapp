@@ -137,9 +137,7 @@ export class TransactionService {
 
   // API: GET /api/transactions
   private readonly http = inject(HttpClient);
-  constructor() {
-   
-  }
+  constructor() {}
   fetchAll() {
     return this.http.get<Transaction[]>(`${API_BASE}/transactions`);
   }
