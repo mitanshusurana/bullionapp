@@ -185,9 +185,4 @@ import { TransactionService } from "../services/transaction.service";
   `,
 })
 export class HomePageComponent {
-  private readonly tx = inject(TransactionService);
-
-  readonly transactions = this.tx.transactions;
-  readonly totals = this.tx.totals;
-  readonly count = computed(() => this.tx.transactions().length);
 }
