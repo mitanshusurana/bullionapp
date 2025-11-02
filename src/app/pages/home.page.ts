@@ -1,7 +1,7 @@
-import { Component, computed, inject } from "@angular/core";
+import { Component, computed, inject, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { TransactionService } from "../services/transaction.service";
+import { ReportsService } from "../services/reports.service";
 
 @Component({
   selector: "app-home-page",
@@ -44,24 +44,40 @@ import { TransactionService } from "../services/transaction.service";
       </header>
 
       <main class="max-w-md mx-auto px-4 py-4 pb-28">
-        <!-- Totals -->
+        <!-- Navigation to Reports -->
         <section class="grid grid-cols-2 gap-3">
-          <div class="rounded-xl bg-white shadow-soft p-4">
-            <p class="text-xs text-slate-500">Net</p>
-            <p
-              class="mt-1 text-2xl font-semibold"
-              [class.text-emerald-600]="totals().net >= 0"
-              [class.text-rose-600]="totals().net < 0"
-            >
-              {{ totals().net | currency: "INR" : "symbol" : "1.0-0" }}
-            </p>
-          </div>
-          <div class="rounded-xl bg-white shadow-soft p-4">
-            <p class="text-xs text-slate-500">Transactions</p>
-            <p class="mt-1 text-2xl font-semibold text-slate-900">
-              {{ count() }}
-            </p>
-          </div>
+          <a
+            [routerLink]="['/daybook']"
+            class="group rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 p-4 flex flex-col items-start gap-2"
+          >
+            <div class="p-2 rounded-lg bg-indigo-600 text-white">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-9h-4v4h4v-4z"
+                />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-indigo-900">Daybook</p>
+              <p class="text-xs text-indigo-700">Daily transactions</p>
+            </div>
+          </a>
+          <a
+            [routerLink]="['/pl']"
+            class="group rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-4 flex flex-col items-start gap-2"
+          >
+            <div class="p-2 rounded-lg bg-purple-600 text-white">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-3-10h-2v4h2v-4zm-4 0H9v4h2v-4z"
+                />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-purple-900">P/L Book</p>
+              <p class="text-xs text-purple-700">Profit & Loss</p>
+            </div>
+          </a>
         </section>
 
         <!-- Quick actions -->
@@ -158,80 +174,32 @@ import { TransactionService } from "../services/transaction.service";
           </a>
         </section>
 
-        <!-- Recent -->
-        <section class="mt-6">
-          <h2 class="text-sm font-semibold text-slate-700 mb-2">Recent</h2>
-          <div class="space-y-2" *ngIf="transactions().length; else empty">
+        <!-- Inventory Summary -->
+        <section class="mt-8 pt-6 border-t border-slate-200">
+          <div class="grid grid-cols-2 gap-3">
             <div
-              *ngFor="let t of transactions()"
-              class="rounded-xl bg-white shadow-soft p-4 flex items-center gap-3"
+              class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-4"
             >
-              <div
-                class="h-10 w-10 rounded-lg flex items-center justify-center text-white"
-                [ngClass]="{
-                  'bg-emerald-600': t.type === 'sale',
-                  'bg-amber-600': t.type === 'purchase',
-                  'bg-blue-600': t.type === 'cashin',
-                  'bg-rose-600': t.type === 'cashout',
-                  'bg-cyan-600': t.type === 'metalin',
-                  'bg-fuchsia-600': t.type === 'metalout',
-                }"
-              >
-                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
-                  <path *ngIf="t.type === 'sale'" d="M7 13h10v-2H7v2z" />
-                  <path *ngIf="t.type === 'purchase'" d="M17 11H7v2h10v-2z" />
-                  <path
-                    *ngIf="t.type === 'cashin'"
-                    d="M12 3l4 4h-3v6h-2V7H8l4-4z"
-                  />
-                  <path
-                    *ngIf="t.type === 'cashout'"
-                    d="M12 21l-4-4h3v-6h2v6h3l-4 4z"
-                  />
-                  <path *ngIf="t.type === 'metalin'" d="M5 12h14v2H5z" />
-                  <path *ngIf="t.type === 'metalout'" d="M5 10h14v2H5z" />
-                </svg>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-slate-900 capitalize">
-                  {{ t.type }}
-                  <span *ngIf="t.name" class="text-slate-500"
-                    >• {{ t.name }}</span
-                  >
-                </p>
-                <p
-                  class="text-xs text-slate-500 truncate"
-                  *ngIf="t.type === 'metalin' || t.type === 'metalout'"
-                >
-                  {{ t.netWt || t.grossWt || 0 }} g at {{ t.purity || 0 }}%
-                </p>
-                <p
-                  class="text-xs text-slate-500 truncate"
-                  *ngIf="t.type !== 'metalin' && t.type !== 'metalout'"
-                >
-                  {{ t.note || "No note" }}
-                </p>
-              </div>
-              <div class="text-right">
-                <p
-                  class="text-sm font-semibold text-slate-900"
-                  *ngIf="t.type !== 'metalin' && t.type !== 'metalout'"
-                >
-                  {{ t.amount || 0 | currency: "INR" : "symbol" : "1.0-0" }}
-                </p>
-                <p class="text-[10px] text-slate-500">
-                  {{ t.createdAt | date: "short" }}
-                </p>
-              </div>
+              <p class="text-xs text-blue-700 font-medium">
+                Total Cash Balance
+              </p>
+              <p class="mt-2 text-2xl font-semibold text-blue-900">
+                {{
+                  inventory().totalCash | currency: "INR" : "symbol" : "1.0-0"
+                }}
+              </p>
+            </div>
+            <div
+              class="rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 p-4"
+            >
+              <p class="text-xs text-amber-700 font-medium">
+                Total Metal Balance
+              </p>
+              <p class="mt-2 text-2xl font-semibold text-amber-900">
+                {{ inventory().totalMetal | number: "1.3-3" }} g
+              </p>
             </div>
           </div>
-          <ng-template #empty>
-            <div
-              class="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500"
-            >
-              No transactions yet. Start by recording one.
-            </div>
-          </ng-template>
         </section>
       </main>
 
@@ -248,9 +216,21 @@ import { TransactionService } from "../services/transaction.service";
   `,
 })
 export class HomePageComponent {
-  private readonly tx = inject(TransactionService);
+  private readonly reports = inject(ReportsService);
 
-  readonly transactions = this.tx.transactions;
-  readonly totals = this.tx.totals;
-  readonly count = computed(() => this.tx.transactions().length);
+  readonly inventory = signal<{ totalCash: number; totalMetal: number }>({
+    totalCash: 0,
+    totalMetal: 0,
+  });
+
+  constructor() {
+    this.fetchInventory();
+  }
+
+  private fetchInventory() {
+    this.reports.getInventory().subscribe({
+      next: (data) => this.inventory.set(data),
+      error: () => this.inventory.set({ totalCash: 0, totalMetal: 0 }),
+    });
+  }
 }
