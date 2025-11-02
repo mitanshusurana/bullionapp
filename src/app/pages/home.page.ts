@@ -185,4 +185,15 @@ import { PartyService } from "../services/party.service";
   `,
 })
 export class HomePageComponent {
+  private readonly partyService = inject(PartyService);
+
+  readonly totalCash = computed(() => {
+    const parties = this.partyService.parties();
+    return parties.reduce((sum, p) => sum + (p.cashBalance || 0), 0);
+  });
+
+  readonly totalMetal = computed(() => {
+    const parties = this.partyService.parties();
+    return parties.reduce((sum, p) => sum + (p.metalBalance || 0), 0);
+  });
 }
