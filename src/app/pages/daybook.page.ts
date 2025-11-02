@@ -86,8 +86,17 @@ export class DaybookPageComponent {
 
   readonly date = signal(this.today());
   readonly data = signal<DaybookResponse | null>(null);
+  readonly searchQuery = signal('');
+  readonly selectedTypes = signal<Set<string>>(new Set());
 
   selectedTransaction: DaybookEntry | null = null;
+
+  readonly filteredEntries = signal<DaybookEntry[]>([]);
+
+  constructor() {
+    this.fetch();
+    this.updateFilteredEntries();
+  }
 
   constructor() { this.fetch(); }
 
