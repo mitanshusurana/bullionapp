@@ -38,10 +38,31 @@ import { TransactionDetailModalComponent } from '../components/transaction-detai
         <div class="rounded-xl bg-white shadow-soft p-4 col-span-2"><p class="text-xs text-slate-500">Net</p><p class="mt-1 text-2xl font-semibold" [class.text-emerald-600]="d.totals.net>=0" [class.text-rose-600]="d.totals.net<0">{{ d.totals.net | currency:'INR':'symbol':'1.0-0' }}</p></div>
       </section>
 
-      <!-- Entries -->
+      <!-- Search and Filter -->
       <section class="mt-6">
+        <div class="mb-4">
+          <input
+            type="text"
+            placeholder="Search by name, note, or type..."
+            (input)="onSearch($event.target.value)"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+          />
+        </div>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button
+            *ngFor="let type of ['sale', 'purchase', 'cashin', 'cashout', 'metalin', 'metalout']"
+            (click)="toggleType(type)"
+            [class]="'text-xs px-3 py-1 rounded-lg border transition ' + (isTypeSelected(type) ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-700 border-slate-300 hover:border-slate-400')"
+          >
+            {{ type | uppercase }}
+          </button>
+        </div>
+      </section>
+
+      <!-- Entries -->
+      <section class="mt-4">
         <h2 class="text-sm font-semibold text-slate-700 mb-2">Entries</h2>
-        <div class="space-y-2" *ngIf="data()?.entries?.length; else empty">
+        <div class="space-y-2" *ngIf="filteredEntries().length; else empty">
           <div *ngFor="let t of data()?.entries" 
                (click)="openTransactionDetails(t)"
                class="rounded-xl bg-white shadow-soft p-4 flex items-center gap-3 cursor-pointer hover:bg-slate-50">
