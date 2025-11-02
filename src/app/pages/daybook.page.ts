@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe, NgIf, NgFor } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReportsService, DaybookEntry, DaybookResponse } from '../services/reports.service';
+import { TransactionDetailModalComponent } from '../components/transaction-detail-modal.component';
 
 @Component({
   selector: 'app-daybook',
