@@ -200,15 +200,18 @@ import { ReportsService } from "../services/reports.service";
   `,
 })
 export class HomePageComponent {
-  private readonly partyService = inject(PartyService);
+  private readonly reports = inject(ReportsService);
 
-  readonly totalCash = computed(() => {
-    const parties = this.partyService.parties();
-    return parties.reduce((sum, p) => sum + (p.cashBalance || 0), 0);
-  });
+  readonly inventory = signal<{ totalCash: number; totalMetal: number }>({ totalCash: 0, totalMetal: 0 });
 
-  readonly totalMetal = computed(() => {
-    const parties = this.partyService.parties();
-    return parties.reduce((sum, p) => sum + (p.metalBalance || 0), 0);
-  });
+  constructor() {
+    this.fetchInventory();
+  }
+
+  private fetchInventory() {
+    this.reports.getInventory().subscribe({
+      next: (data) => this.inventory.set(data),
+      error: () => this.inventory.set({ totalCash: 0, totalMetal: 0 })
+    });
+  }
 }
