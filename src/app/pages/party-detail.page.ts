@@ -63,9 +63,9 @@ import { of } from 'rxjs';
           </button>
         </div>
 
-        <div class="space-y-2" *ngIf="getFilteredTransactions(txs() | async || [])?.length; else empty">
+        <div class="space-y-2" *ngIf="getFilteredTransactions(loadedTransactions())?.length; else empty">
           <div
-            *ngFor="let t of getFilteredTransactions(txs() | async || [])" 
+            *ngFor="let t of getFilteredTransactions(loadedTransactions())" 
             (click)="openTxDetail(t)"
             class="rounded-xl bg-white shadow-soft p-4 flex items-center gap-3 cursor-pointer hover:bg-slate-50 transition">
             <div class="h-10 w-10 rounded-lg flex items-center justify-center text-white"
