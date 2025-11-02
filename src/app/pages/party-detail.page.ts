@@ -97,9 +97,16 @@ export class PartyDetailPageComponent {
   });
 
   readonly selectedTx = signal<any | null>(null);
+  readonly searchQuery = signal('');
+  readonly selectedTypes = signal<Set<string>>(new Set());
+  readonly filteredTxs = signal<any[]>([]);
 
   constructor() {
     this.refreshPartyData();
+
+    effect(() => {
+      this.updateFilteredTransactions();
+    });
   }
 
   private refreshPartyData() {
