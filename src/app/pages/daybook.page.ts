@@ -7,7 +7,7 @@ import { TransactionDetailModalComponent } from '../components/transaction-detai
 @Component({
   selector: 'app-daybook',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TransactionDetailModalComponent],
   providers: [DatePipe],
   template: `
   <div class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
