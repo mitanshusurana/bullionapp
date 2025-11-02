@@ -1,7 +1,7 @@
-import { Component, computed, inject } from "@angular/core";
+import { Component, computed, inject, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { PartyService } from "../services/party.service";
+import { ReportsService } from "../services/reports.service";
 
 @Component({
   selector: "app-home-page",
