@@ -144,10 +144,10 @@ export class TransactionService {
     return this.http.get<Transaction[]>(`${API_BASE}/transactions`);
   }
 
-  // API: GET /api/transactions?party=Name
-  fetchByParty(name: string) {
+  // API: GET /api/transactions?party=Name&page=0&limit=10
+  fetchByParty(name: string, page: number = 0, limit: number = 10) {
     return this.http.get<Transaction[]>(`${API_BASE}/transactions`, {
-      params: { party: name },
+      params: { party: name, page: page.toString(), limit: limit.toString() },
     });
   }
 }
