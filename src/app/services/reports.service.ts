@@ -58,4 +58,9 @@ export class ReportsService {
   getPL(params: { from?: string; to?: string; date?: string }) {
     return this.http.get<PLResponse>(`${API_BASE}/pl`, { params: { ...params } as any });
   }
+
+  // API: GET /api/inventory
+  getInventory() {
+    return this.http.get<InventoryResponse>(`${API_BASE}/inventory`);
+  }
 }
