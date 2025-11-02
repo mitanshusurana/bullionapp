@@ -63,7 +63,7 @@ import { TransactionDetailModalComponent } from '../components/transaction-detai
       <section class="mt-4">
         <h2 class="text-sm font-semibold text-slate-700 mb-2">Entries</h2>
         <div class="space-y-2" *ngIf="filteredEntries().length; else empty">
-          <div *ngFor="let t of data()?.entries" 
+          <div *ngFor="let t of filteredEntries()" 
                (click)="openTransactionDetails(t)"
                class="rounded-xl bg-white shadow-soft p-4 flex items-center gap-3 cursor-pointer hover:bg-slate-50">
             <div class="h-10 w-10 rounded-lg flex items-center justify-center text-white"
