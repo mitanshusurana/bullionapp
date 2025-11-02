@@ -44,24 +44,36 @@ import { TransactionService } from "../services/transaction.service";
       </header>
 
       <main class="max-w-md mx-auto px-4 py-4 pb-28">
-        <!-- Totals -->
+        <!-- Navigation to Reports -->
         <section class="grid grid-cols-2 gap-3">
-          <div class="rounded-xl bg-white shadow-soft p-4">
-            <p class="text-xs text-slate-500">Net</p>
-            <p
-              class="mt-1 text-2xl font-semibold"
-              [class.text-emerald-600]="totals().net >= 0"
-              [class.text-rose-600]="totals().net < 0"
-            >
-              {{ totals().net | currency: "INR" : "symbol" : "1.0-0" }}
-            </p>
-          </div>
-          <div class="rounded-xl bg-white shadow-soft p-4">
-            <p class="text-xs text-slate-500">Transactions</p>
-            <p class="mt-1 text-2xl font-semibold text-slate-900">
-              {{ count() }}
-            </p>
-          </div>
+          <a
+            [routerLink]="['/daybook']"
+            class="group rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 p-4 flex flex-col items-start gap-2"
+          >
+            <div class="p-2 rounded-lg bg-indigo-600 text-white">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5-9h-4v4h4v-4z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-indigo-900">Daybook</p>
+              <p class="text-xs text-indigo-700">Daily transactions</p>
+            </div>
+          </a>
+          <a
+            [routerLink]="['/pl-book']"
+            class="group rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-4 flex flex-col items-start gap-2"
+          >
+            <div class="p-2 rounded-lg bg-purple-600 text-white">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-3-10h-2v4h2v-4zm-4 0H9v4h2v-4z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-purple-900">P/L Book</p>
+              <p class="text-xs text-purple-700">Profit & Loss</p>
+            </div>
+          </a>
         </section>
 
         <!-- Quick actions -->
