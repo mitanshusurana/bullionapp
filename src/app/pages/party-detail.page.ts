@@ -42,9 +42,28 @@ import { of } from 'rxjs';
 
       <!-- Transactions -->
       <section class="mt-6">
-        <h2 class="text-sm font-semibold text-slate-700 mb-2">Transactions</h2>
+        <h2 class="text-sm font-semibold text-slate-700 mb-3">Transactions</h2>
 
-        <div class="space-y-2" *ngIf="(txs() | async)?.length; else empty">
+        <!-- Search and Filter -->
+        <div class="mb-4">
+          <input
+            type="text"
+            placeholder="Search by note, amount, or type..."
+            (input)="onSearch($event.target.value)"
+            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+          />
+        </div>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button
+            *ngFor="let type of ['sale', 'purchase', 'cashin', 'cashout', 'metalin', 'metalout']"
+            (click)="toggleType(type)"
+            [class]="'text-xs px-3 py-1 rounded-lg border transition ' + (isTypeSelected(type) ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-700 border-slate-300 hover:border-slate-400')"
+          >
+            {{ type | uppercase }}
+          </button>
+        </div>
+
+        <div class="space-y-2" *ngIf="getFilteredTransactions(txs() | async || [])?.length; else empty">
           <div 
             *ngFor="let t of (txs() | async)" 
             (click)="openTxDetail(t)"
