@@ -9,7 +9,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'app-party-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TransactionDetailModalComponent],
   template: `
   <div class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
     <!-- Header -->
