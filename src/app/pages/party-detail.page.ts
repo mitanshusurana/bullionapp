@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PartyService } from '../services/party.service';
 import { TransactionService } from '../services/transaction.service';
+import { TransactionDetailModalComponent } from '../components/transaction-detail-modal.component';
 import { of } from 'rxjs';
 
 @Component({
