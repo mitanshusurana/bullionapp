@@ -64,8 +64,8 @@ import { of } from 'rxjs';
         </div>
 
         <div class="space-y-2" *ngIf="getFilteredTransactions(txs() | async || [])?.length; else empty">
-          <div 
-            *ngFor="let t of (txs() | async)" 
+          <div
+            *ngFor="let t of getFilteredTransactions(txs() | async || [])" 
             (click)="openTxDetail(t)"
             class="rounded-xl bg-white shadow-soft p-4 flex items-center gap-3 cursor-pointer hover:bg-slate-50 transition">
             <div class="h-10 w-10 rounded-lg flex items-center justify-center text-white"
