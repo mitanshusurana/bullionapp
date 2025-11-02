@@ -40,6 +40,11 @@ export interface PLResponse {
   };
 }
 
+export interface InventoryResponse {
+  totalCash: number;
+  totalMetal: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ReportsService {
   private readonly http = inject(HttpClient);
