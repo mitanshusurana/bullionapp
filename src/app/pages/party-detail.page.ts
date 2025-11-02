@@ -113,6 +113,58 @@ export class PartyDetailPageComponent {
     this.parties.ensureFreshNames('timer');
   }
 
+  private updateFilteredTransactions() {
+    // This will be called whenever txs observable emits or filters change
+    // For now, we'll handle it in the template with the async pipe
+  }
+
+  onSearch(query: string) {
+    this.searchQuery.set(query);
+  }
+
+  toggleType(type: string) {
+    const types = new Set(this.selectedTypes());
+    if (types.has(type)) {
+      types.delete(type);
+    } else {
+      types.add(type);
+    }
+    this.selectedTypes.set(types);
+  }
+
+  isTypeSelected(type: string): boolean {
+    return this.selectedTypes().has(type);
+  }
+
+  getFilteredTransactions(transactions: any[]): any[] {
+    if (!transactions) return [];
+
+    const query = this.searchQuery().toLowerCase().trim();
+    const types = this.selectedTypes();
+
+    return transactions.filter(tx => {
+      // Filter by type
+      if (types.size > 0 && !types.has(tx.type)) {
+        return false;
+      }
+
+      // Filter by search query
+      if (query) {
+        const searchable = [
+          tx.note || '',
+          tx.type,
+          tx.amount?.toString() || '',
+          tx.netWt?.toString() || ''
+        ].join(' ').toLowerCase();
+        if (!searchable.includes(query)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }
+
   openTxDetail(tx: any) {
     this.selectedTx.set(tx);
   }
