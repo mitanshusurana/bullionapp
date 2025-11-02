@@ -72,34 +72,11 @@ import { of } from 'rxjs';
       </section>
     </main>
 
-    <!-- Modal -->
-    <div *ngIf="selectedTx()" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div class="relative bg-white rounded-xl shadow-2xl w-[90%] max-w-md p-6">
-        <button (click)="closeTxDetail()" class="absolute top-3 right-3 text-slate-500 hover:text-slate-800 text-xl leading-none">✕</button>
-        <h3 class="text-lg font-semibold text-slate-900 mb-4">Transaction Details</h3>
-
-        <div class="space-y-2 text-sm text-slate-700">
-          <p><span class="font-medium">Type:</span> {{ selectedTx()?.type }}</p>
-          <p><span class="font-medium">Name:</span> {{ selectedTx()?.name }}</p>
-          <p><span class="font-medium">Date:</span> {{ selectedTx()?.date | date:'mediumDate' }}</p>
-          <p><span class="font-medium">Note:</span> {{ selectedTx()?.note || '—' }}</p>
-          <p><span class="font-medium">Gross Wt:</span> {{ selectedTx()?.grossWt }} g</p>
-          <p><span class="font-medium">Purity:</span> {{ selectedTx()?.purity }}%</p>
-          <p><span class="font-medium">Net Wt:</span> {{ selectedTx()?.netWt }} g</p>
-          <p><span class="font-medium">Rate:</span> ₹{{ selectedTx()?.rate }}</p>
-          <p><span class="font-medium">Amount:</span> ₹{{ selectedTx()?.amount }}</p>
-          <p><span class="font-medium">Cash In:</span> {{ selectedTx()?.cashIn || '—' }}</p>
-          <p><span class="font-medium">Cash Out:</span> {{ selectedTx()?.cashOut || '—' }}</p>
-          <p><span class="font-medium">Balance:</span> ₹{{ selectedTx()?.balance }}</p>
-          <p><span class="font-medium">Created At:</span> {{ selectedTx()?.createdAt | date:'medium' }}</p>
-          <p><span class="font-medium">Transaction ID:</span> {{ selectedTx()?.id }}</p>
-        </div>
-
-        <div class="mt-5 text-right">
-          <button (click)="closeTxDetail()" class="px-4 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-900">Close</button>
-        </div>
-      </div>
-    </div>
+    <!-- Transaction Details Modal -->
+    <app-transaction-detail-modal
+      [transaction]="selectedTx()"
+      (close)="closeTxDetail()">
+    </app-transaction-detail-modal>
   </div>
   `,
 })
