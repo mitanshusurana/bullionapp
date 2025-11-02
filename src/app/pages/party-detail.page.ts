@@ -139,6 +139,32 @@ export class PartyDetailPageComponent {
     this.parties.ensureFreshNames('timer');
   }
 
+  private loadTransactions() {
+    const name = this.party()?.name || '';
+    if (!name) return;
+
+    this.isLoading.set(true);
+    this.txSvc.fetchByParty(name, this.currentPage(), this.pageSize()).subscribe({
+      next: (transactions) => {
+        const current = this.loadedTransactions();
+        const updated = this.currentPage() === 0 ? transactions : [...current, ...transactions];
+        this.loadedTransactions.set(updated);
+        this.hasMore.set(transactions.length === this.pageSize());
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.hasMore.set(false);
+      }
+    });
+  }
+
+  loadMore() {
+    if (this.isLoading() || !this.hasMore()) return;
+    this.currentPage.set(this.currentPage() + 1);
+    this.loadTransactions();
+  }
+
   private updateFilteredTransactions() {
     // This will be called whenever txs observable emits or filters change
     // For now, we'll handle it in the template with the async pipe
