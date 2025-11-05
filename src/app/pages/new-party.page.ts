@@ -117,7 +117,7 @@ export class NewPartyPageComponent {
       cashBalance: Number(cashBalance) || 0,
       metalBalance: Number(metalBalance) || 0,
     });
-    this.parties.ensureFreshNames("new_party");
+    this.parties.ensureFreshNames();
     this.router.navigateByUrl("/");
   }
 }

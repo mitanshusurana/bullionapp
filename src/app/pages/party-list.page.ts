@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PartyService } from '../services/party.service';
 
 @Component({
@@ -25,7 +25,6 @@ import { PartyService } from '../services/party.service';
 
     <main class="max-w-md mx-auto px-4 py-4 pb-24">
       <div *ngIf="!parties().length" class="rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500">No parties yet. Create one.</div>
-
       <div class="space-y-2">
         <a *ngFor="let p of parties()" [routerLink]="['/parties', p.name]" class="block rounded-xl bg-white shadow-soft p-4">
           <div class="flex items-center justify-between">
@@ -48,5 +47,9 @@ import { PartyService } from '../services/party.service';
 })
 export class PartyListPageComponent {
   private readonly partiesSvc = inject(PartyService);
-  readonly parties = computed(() => this.partiesSvc.parties().slice().sort((a,b)=> a.name.localeCompare(b.name)));
+  private readonly router = inject(Router);
+  readonly parties = computed(() =>
+    this.partiesSvc.parties().slice().sort((a,b)=> a.name.localeCompare(b.name))
+  );
+
 }

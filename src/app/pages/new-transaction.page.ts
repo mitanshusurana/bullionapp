@@ -465,7 +465,7 @@ export class NewTransactionPageComponent {
         const bal =
           type === "sale"
             ? +(amt - cashIn).toFixed(2)
-            : +(amt - cashOut).toFixed(2);
+            : +(cashOut - amt).toFixed(2);
         this.form.controls.balance.setValue(bal, { emitEvent: false });
       }
     });
