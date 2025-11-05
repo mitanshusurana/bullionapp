@@ -4,6 +4,17 @@ import { API_BASE } from "./party.service";
 import { v4 as uuidv4 } from "uuid";
 import { SyncService } from "./sync.service";
 
+/** Return a UTC ISO string that equals the current India (Asia/Kolkata) wall-clock time.
+ *
+ * This shifts the current instant by +5.5 hours and returns an ISO string with Z.
+ * Example: if local India time is 2025-11-05T14:48:03+05:30, this returns
+ * "2025-11-05T09:18:03.000Z" (UTC) which numerically equals adding 5.5 hours to now.
+ */
+function nowIndiaIso(): string {
+  const offsetMs = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes
+  return new Date(Date.now() + offsetMs).toISOString();
+}
+
 export type TxType =
   | "sale"
   | "purchase"
@@ -74,7 +85,7 @@ export class TransactionService {
     const tx: Transaction = {
       ...input,
       id: uuidv4(),
-      createdAt: new Date().toISOString(),
+      createdAt: nowIndiaIso(),
     };
 
     // Optimistically update local store
