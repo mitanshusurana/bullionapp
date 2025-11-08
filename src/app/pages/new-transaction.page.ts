@@ -536,6 +536,20 @@ export class NewTransactionPageComponent {
     }
   }
 
+  formatTypeLabel(type: TxType): string {
+    const labels: Record<TxType, string> = {
+      sale: 'sale',
+      purchase: 'purchase',
+      cashin: 'cash in',
+      cashout: 'cash out',
+      metalin: 'metal in',
+      metalout: 'metal out',
+      rateCutsales: 'rate cut sales',
+      ratecutPurchase: 'rate cut purchase',
+    };
+    return labels[type] || type;
+  }
+
   setType(t: TxType) {
     this.type.set(t);
     this.form.patchValue(
