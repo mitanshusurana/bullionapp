@@ -557,7 +557,7 @@ export class NewTransactionPageComponent {
 
   submitDisabled(): boolean {
     const t = this.type();
-    if (t === "sale" || t === "purchase") {
+    if (t === "sale" || t === "purchase" || t === "rateCutsales" || t === "ratecutPurchase") {
       return (
         !this.form.controls.amount.value ||
         !this.form.controls.grossWt.value ||
