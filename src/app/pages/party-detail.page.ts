@@ -50,7 +50,7 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
           </div>
           <div class="flex flex-wrap gap-2 mb-4">
             <button
-              *ngFor="let type of ['sale','purchase','cashin','cashout','metalin','metalout']"
+              *ngFor="let type of ['sale','purchase','cashin','cashout','metalin','metalout','rateCutsales','ratecutPurchase']"
               (click)="toggleType(type)"
               [class]="
                 'text-xs px-3 py-1 rounded-lg border transition ' +
@@ -58,7 +58,7 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
                   ? 'bg-slate-800 text-white border-slate-800'
                   : 'bg-white text-slate-700 border-slate-300 hover:border-slate-400')"
             >
-              {{ type | uppercase }}
+              {{ (type === 'rateCutsales' ? 'RATE CUT SALE' : type === 'ratecutPurchase' ? 'RATE CUT BUY' : type) | uppercase }}
             </button>
           </div>
 
