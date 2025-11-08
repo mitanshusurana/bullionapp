@@ -172,6 +172,36 @@ import { ReportsService } from "../services/reports.service";
               <p class="text-xs text-fuchsia-700">Issue metal</p>
             </div>
           </a>
+          <a
+            [routerLink]="['/transaction/new']"
+            [queryParams]="{ type: 'rateCutsales' }"
+            class="group rounded-xl bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 p-4 flex items-center gap-3"
+          >
+            <div class="p-2 rounded-lg bg-teal-600 text-white">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                <path d="M7 13h10v-2H7v2z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-teal-900">Rate Cut Sale</p>
+              <p class="text-xs text-teal-700">Sell with rate cut</p>
+            </div>
+          </a>
+          <a
+            [routerLink]="['/transaction/new']"
+            [queryParams]="{ type: 'ratecutPurchase' }"
+            class="group rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 p-4 flex items-center gap-3"
+          >
+            <div class="p-2 rounded-lg bg-orange-600 text-white">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                <path d="M17 11H7v2h10v-2z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-orange-900">Rate Cut Buy</p>
+              <p class="text-xs text-orange-700">Buy with rate cut</p>
+            </div>
+          </a>
         </section>
 
         <!-- Inventory Summary -->
