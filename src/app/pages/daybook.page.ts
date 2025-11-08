@@ -158,6 +158,8 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
                   'bg-rose-600': t.type === 'cashout',
                   'bg-cyan-600': t.type === 'metalin',
                   'bg-fuchsia-600': t.type === 'metalout',
+                  'bg-teal-600': t.type === 'rateCutsales',
+                  'bg-orange-600': t.type === 'ratecutPurchase',
                 }"
               >
                 <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
