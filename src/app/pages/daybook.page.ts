@@ -111,6 +111,8 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
                   'cashout',
                   'metalin',
                   'metalout',
+                  'rateCutsales',
+                  'ratecutPurchase',
                 ]
               "
               (click)="toggleType(type)"
@@ -121,7 +123,7 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
                   : 'bg-white text-slate-700 border-slate-300 hover:border-slate-400')
               "
             >
-              {{ type | uppercase }}
+              {{ (type === 'rateCutsales' ? 'Rate Cut Sale' : type === 'ratecutPurchase' ? 'Rate Cut Buy' : type) | uppercase }}
             </button>
           </div>
         </section>
