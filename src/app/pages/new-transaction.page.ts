@@ -577,7 +577,7 @@ export class NewTransactionPageComponent {
     const date = this.form.controls.date.value || undefined;
     const note = this.form.controls.note.value || "";
 
-    if (t === "sale" || t === "purchase") {
+    if (t === "sale" || t === "purchase" || t === "rateCutsales" || t === "ratecutPurchase") {
       const grossWt = Number(this.form.controls.grossWt.value) || 0;
       const purity = Number(this.form.controls.purity.value) || 0;
       const netWt = Number(this.form.controls.netWt.value) || 0;
@@ -587,7 +587,7 @@ export class NewTransactionPageComponent {
       const cashOut = Number(this.form.controls.cashOut.value) || 0;
       const balance =
         Number(this.form.controls.balance.value) ||
-        amount - (t === "sale" ? cashIn : cashOut);
+        amount - ((t === "sale" || t === "rateCutsales") ? cashIn : cashOut);
 
       this.tx.add({
         type: t,
@@ -599,8 +599,8 @@ export class NewTransactionPageComponent {
         netWt,
         rate,
         amount,
-        cashIn: t === "sale" ? cashIn : undefined,
-        cashOut: t === "purchase" ? cashOut : undefined,
+        cashIn: (t === "sale" || t === "rateCutsales") ? cashIn : undefined,
+        cashOut: (t === "purchase" || t === "ratecutPurchase") ? cashOut : undefined,
         balance,
       });
     } else if (t === "cashin" || t === "cashout") {
