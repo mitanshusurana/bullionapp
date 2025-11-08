@@ -182,9 +182,9 @@ import { PartyService } from "../services/party.service";
             </div>
           </div>
 
-          <!-- SALE / PURCHASE -->
+          <!-- SALE / PURCHASE / RATECUT SALES / RATECUT PURCHASE -->
           <div
-            *ngIf="type() === 'sale' || type() === 'purchase'"
+            *ngIf="type() === 'sale' || type() === 'purchase' || type() === 'rateCutsales' || type() === 'ratecutPurchase'"
             class="space-y-4"
           >
             <div class="grid grid-cols-3 gap-3">
@@ -260,7 +260,7 @@ import { PartyService } from "../services/party.service";
             </div>
 
             <div class="grid grid-cols-2 gap-3">
-              <div *ngIf="type() === 'sale'">
+              <div *ngIf="type() === 'sale' || type() === 'rateCutsales'">
                 <label class="block text-xs font-medium text-slate-600 mb-2"
                   >Cash In (₹)</label
                 >
@@ -273,7 +273,7 @@ import { PartyService } from "../services/party.service";
                   class="w-full rounded-xl border border-slate-300 bg-white p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
-              <div *ngIf="type() === 'purchase'">
+              <div *ngIf="type() === 'purchase' || type() === 'ratecutPurchase'">
                 <label class="block text-xs font-medium text-slate-600 mb-2"
                   >Cash Out (₹)</label
                 >
