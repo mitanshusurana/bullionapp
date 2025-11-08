@@ -470,14 +470,14 @@ export class NewTransactionPageComponent {
       if (!Number.isNaN(net))
         this.form.controls.netWt.setValue(net, { emitEvent: false });
 
-      if (type === "sale" || type === "purchase") {
+      if (type === "sale" || type === "purchase" || type === "rateCutsales" || type === "ratecutPurchase") {
         const amt = +(net * rate).toFixed(2);
         this.form.controls.amount.setValue(amt, { emitEvent: false });
 
         const cashIn = Number(this.form.controls.cashIn.value) || 0;
         const cashOut = Number(this.form.controls.cashOut.value) || 0;
         const bal =
-          type === "sale"
+          (type === "sale" || type === "rateCutsales")
             ? +(amt - cashIn).toFixed(2)
             : +(cashOut - amt).toFixed(2);
         this.form.controls.balance.setValue(bal, { emitEvent: false });
