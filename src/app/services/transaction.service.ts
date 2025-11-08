@@ -21,7 +21,9 @@ export type TxType =
   | "cashin"
   | "cashout"
   | "metalin"
-  | "metalout";
+  | "metalout"
+  | "ratecutPurchase"
+  | "rateCutsales";
 
 export interface Transaction {
   id: string;
@@ -51,7 +53,9 @@ export interface SummaryTotals {
   purchase: number;
   cashin: number;
   cashout: number;
-  net: number; // sale - purchase + cashin - cashout
+  rateCutsales: number;
+  ratecutPurchase: number;
+  net: number; // sale - purchase + cashin - cashout + rateCutsales - ratecutPurchase
 }
 
 const STORAGE_KEY = "gold-pos:transactions";
@@ -69,6 +73,8 @@ export class TransactionService {
       purchase: 0,
       cashin: 0,
       cashout: 0,
+      rateCutsales: 0,
+      ratecutPurchase: 0,
       net: 0,
     };
     for (const t of this._transactions()) {
@@ -77,7 +83,13 @@ export class TransactionService {
         acc[t.type] += t.amount || 0;
       }
     }
-    acc.net = acc.sale - acc.purchase + acc.cashin - acc.cashout;
+    acc.net =
+      acc.sale -
+      acc.purchase +
+      acc.cashin -
+      acc.cashout +
+      acc.rateCutsales -
+      acc.ratecutPurchase;
     return acc;
   });
 

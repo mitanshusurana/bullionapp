@@ -4,7 +4,15 @@ import { API_BASE } from "./party.service";
 
 export interface DaybookEntry {
   id: string;
-  type: "sale" | "purchase" | "cashin" | "cashout" | "metalin" | "metalout";
+  type:
+    | "sale"
+    | "purchase"
+    | "cashin"
+    | "cashout"
+    | "metalin"
+    | "metalout"
+    | "ratecutPurchase"
+    | "rateCutsales";
   name?: string;
   amount?: number;
   cashIn?: number;
@@ -26,6 +34,8 @@ export interface DaybookResponse {
     purchase: number;
     cashin: number;
     cashout: number;
+    rateCutsales: number;
+    ratecutPurchase: number;
     net: number;
   };
 }

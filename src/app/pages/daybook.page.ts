@@ -79,6 +79,20 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
               {{ d.totals.cashout | currency: "INR" : "symbol" : "1.0-0" }}
             </p>
           </div>
+          <div class="rounded-xl bg-white shadow-soft p-4">
+            <p class="text-xs text-slate-500">Rate Cut Sales</p>
+            <p class="mt-1 text-xl font-semibold">
+              {{ d.totals.rateCutsales | currency: "INR" : "symbol" : "1.0-0" }}
+            </p>
+          </div>
+          <div class="rounded-xl bg-white shadow-soft p-4">
+            <p class="text-xs text-slate-500">Rate Cut Purchases</p>
+            <p class="mt-1 text-xl font-semibold">
+              {{
+                d.totals.ratecutPurchase | currency: "INR" : "symbol" : "1.0-0"
+              }}
+            </p>
+          </div>
           <div class="rounded-xl bg-white shadow-soft p-4 col-span-2">
             <p class="text-xs text-slate-500">Net</p>
             <p
@@ -111,6 +125,8 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
                   'cashout',
                   'metalin',
                   'metalout',
+                  'rateCutsales',
+                  'ratecutPurchase',
                 ]
               "
               (click)="toggleType(type)"
@@ -121,7 +137,14 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
                   : 'bg-white text-slate-700 border-slate-300 hover:border-slate-400')
               "
             >
-              {{ type | uppercase }}
+              {{
+                (type === "rateCutsales"
+                  ? "Rate Cut Sale"
+                  : type === "ratecutPurchase"
+                    ? "Rate Cut Buy"
+                    : type
+                ) | uppercase
+              }}
             </button>
           </div>
         </section>
@@ -144,6 +167,8 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
                   'bg-rose-600': t.type === 'cashout',
                   'bg-cyan-600': t.type === 'metalin',
                   'bg-fuchsia-600': t.type === 'metalout',
+                  'bg-teal-600': t.type === 'rateCutsales',
+                  'bg-orange-600': t.type === 'ratecutPurchase',
                 }"
               >
                 <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
@@ -235,7 +260,15 @@ export class DaybookPageComponent {
         this.data.set({
           date: this.date(),
           entries: [],
-          totals: { sale: 0, purchase: 0, cashin: 0, cashout: 0, net: 0 },
+          totals: {
+            sale: 0,
+            purchase: 0,
+            cashin: 0,
+            cashout: 0,
+            rateCutsales: 0,
+            ratecutPurchase: 0,
+            net: 0,
+          },
         });
         this.updateFilteredEntries();
       },

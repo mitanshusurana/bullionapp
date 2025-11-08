@@ -89,9 +89,24 @@ import { PartyService } from "../services/party.service";
               >
                 Metal Out
               </button>
+              <button
+                type="button"
+                (click)="setType('rateCutsales')"
+                [class]="segClass('rateCutsales')"
+              >
+                Rate Cut Sale
+              </button>
+              <button
+                type="button"
+                (click)="setType('ratecutPurchase')"
+                [class]="segClass('ratecutPurchase')"
+              >
+                Rate Cut Buy
+              </button>
             </div>
             <p class="mt-1 text-[11px] text-slate-500">
-              Selected: <span class="capitalize">{{ type() }}</span>
+              Selected:
+              <span class="capitalize">{{ formatTypeLabel(type()) }}</span>
             </p>
           </div>
 
@@ -126,12 +141,12 @@ import { PartyService } from "../services/party.service";
                     Select a party
                   </button>
                   <button
-                  type="button"
-                  *ngFor="let n of filteredNames()"
-                  (mousedown)="selectName(n)"
-                  (click)="selectName(n)"
-                  class="w-full px-3 py-2 text-sm hover:bg-slate-50"
-                >
+                    type="button"
+                    *ngFor="let n of filteredNames()"
+                    (mousedown)="selectName(n)"
+                    (click)="selectName(n)"
+                    class="w-full px-3 py-2 text-sm hover:bg-slate-50"
+                  >
                     {{ n }}
                   </button>
                 </ng-container>
@@ -168,9 +183,14 @@ import { PartyService } from "../services/party.service";
             </div>
           </div>
 
-          <!-- SALE / PURCHASE -->
+          <!-- SALE / PURCHASE / RATECUT SALES / RATECUT PURCHASE -->
           <div
-            *ngIf="type() === 'sale' || type() === 'purchase'"
+            *ngIf="
+              type() === 'sale' ||
+              type() === 'purchase' ||
+              type() === 'rateCutsales' ||
+              type() === 'ratecutPurchase'
+            "
             class="space-y-4"
           >
             <div class="grid grid-cols-3 gap-3">
@@ -246,7 +266,7 @@ import { PartyService } from "../services/party.service";
             </div>
 
             <div class="grid grid-cols-2 gap-3">
-              <div *ngIf="type() === 'sale'">
+              <div *ngIf="type() === 'sale' || type() === 'rateCutsales'">
                 <label class="block text-xs font-medium text-slate-600 mb-2"
                   >Cash In (₹)</label
                 >
@@ -259,7 +279,9 @@ import { PartyService } from "../services/party.service";
                   class="w-full rounded-xl border border-slate-300 bg-white p-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
-              <div *ngIf="type() === 'purchase'">
+              <div
+                *ngIf="type() === 'purchase' || type() === 'ratecutPurchase'"
+              >
                 <label class="block text-xs font-medium text-slate-600 mb-2"
                   >Cash Out (₹)</label
                 >
@@ -430,7 +452,7 @@ export class NewTransactionPageComponent {
     effect(() => {
       const q = this.route.snapshot.queryParamMap;
       const t = (q.get("type") as TxType) || "sale";
-      const preName = q.get('name');
+      const preName = q.get("name");
       this.setType(t);
       if (preName) {
         this.form.controls.name.setValue(preName);
@@ -439,14 +461,14 @@ export class NewTransactionPageComponent {
     });
 
     this.form.controls.name.valueChanges.subscribe((val) => {
-      const q = (val || '').toLowerCase().trim();
+      const q = (val || "").toLowerCase().trim();
       this.nameQuery.set(q);
-      if (q) { this.showSuggestions.set(true); }
+      if (q) {
+        this.showSuggestions.set(true);
+      }
     });
     // Auto calculations and suggestions
     this.form.valueChanges.subscribe(() => {
-
-
       const g = Number(this.form.controls.grossWt.value) || 0;
       const p = Number(this.form.controls.purity.value) || 0;
       const rate = Number(this.form.controls.rate.value) || 0;
@@ -456,14 +478,19 @@ export class NewTransactionPageComponent {
       if (!Number.isNaN(net))
         this.form.controls.netWt.setValue(net, { emitEvent: false });
 
-      if (type === "sale" || type === "purchase") {
+      if (
+        type === "sale" ||
+        type === "purchase" ||
+        type === "rateCutsales" ||
+        type === "ratecutPurchase"
+      ) {
         const amt = +(net * rate).toFixed(2);
         this.form.controls.amount.setValue(amt, { emitEvent: false });
 
         const cashIn = Number(this.form.controls.cashIn.value) || 0;
         const cashOut = Number(this.form.controls.cashOut.value) || 0;
         const bal =
-          type === "sale"
+          type === "sale" || type === "rateCutsales"
             ? +(amt - cashIn).toFixed(2)
             : +(cashOut - amt).toFixed(2);
         this.form.controls.balance.setValue(bal, { emitEvent: false });
@@ -487,7 +514,7 @@ export class NewTransactionPageComponent {
   }
 
   createPartyFromName() {
-    const name = (this.form.controls.name.value || '').trim();
+    const name = (this.form.controls.name.value || "").trim();
     if (!name) return;
     this.router.navigate(["/party/new"], { queryParams: { name } });
   }
@@ -515,7 +542,25 @@ export class NewTransactionPageComponent {
         return `${base} ${this.type() === "metalin" ? active + " bg-cyan-600" : inactive + " bg-white"}`;
       case "metalout":
         return `${base} ${this.type() === "metalout" ? active + " bg-fuchsia-600" : inactive + " bg-white"}`;
+      case "rateCutsales":
+        return `${base} ${this.type() === "rateCutsales" ? active + " bg-teal-600" : inactive + " bg-white"}`;
+      case "ratecutPurchase":
+        return `${base} ${this.type() === "ratecutPurchase" ? active + " bg-orange-600" : inactive + " bg-white"}`;
     }
+  }
+
+  formatTypeLabel(type: TxType): string {
+    const labels: Record<TxType, string> = {
+      sale: "sale",
+      purchase: "purchase",
+      cashin: "cash in",
+      cashout: "cash out",
+      metalin: "metal in",
+      metalout: "metal out",
+      rateCutsales: "rate cut sales",
+      ratecutPurchase: "rate cut purchase",
+    };
+    return labels[type] || type;
   }
 
   setType(t: TxType) {
@@ -539,7 +584,12 @@ export class NewTransactionPageComponent {
 
   submitDisabled(): boolean {
     const t = this.type();
-    if (t === "sale" || t === "purchase") {
+    if (
+      t === "sale" ||
+      t === "purchase" ||
+      t === "rateCutsales" ||
+      t === "ratecutPurchase"
+    ) {
       return (
         !this.form.controls.amount.value ||
         !this.form.controls.grossWt.value ||
@@ -559,7 +609,12 @@ export class NewTransactionPageComponent {
     const date = this.form.controls.date.value || undefined;
     const note = this.form.controls.note.value || "";
 
-    if (t === "sale" || t === "purchase") {
+    if (
+      t === "sale" ||
+      t === "purchase" ||
+      t === "rateCutsales" ||
+      t === "ratecutPurchase"
+    ) {
       const grossWt = Number(this.form.controls.grossWt.value) || 0;
       const purity = Number(this.form.controls.purity.value) || 0;
       const netWt = Number(this.form.controls.netWt.value) || 0;
@@ -569,7 +624,7 @@ export class NewTransactionPageComponent {
       const cashOut = Number(this.form.controls.cashOut.value) || 0;
       const balance =
         Number(this.form.controls.balance.value) ||
-        amount - (t === "sale" ? cashIn : cashOut);
+        amount - (t === "sale" || t === "rateCutsales" ? cashIn : cashOut);
 
       this.tx.add({
         type: t,
@@ -581,13 +636,14 @@ export class NewTransactionPageComponent {
         netWt,
         rate,
         amount,
-        cashIn: t === "sale" ? cashIn : undefined,
-        cashOut: t === "purchase" ? cashOut : undefined,
+        cashIn: t === "sale" || t === "rateCutsales" ? cashIn : undefined,
+        cashOut:
+          t === "purchase" || t === "ratecutPurchase" ? cashOut : undefined,
         balance,
       });
     } else if (t === "cashin" || t === "cashout") {
       const amount = Number(this.form.controls.amount.value) || 0;
-      const balance = t === "cashin" ? -1*amount : amount;
+      const balance = t === "cashin" ? -1 * amount : amount;
       this.tx.add({ type: t, name, date, note, amount, balance });
     } else {
       // metal in/out
