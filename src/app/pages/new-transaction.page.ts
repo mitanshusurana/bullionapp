@@ -105,7 +105,7 @@ import { PartyService } from "../services/party.service";
               </button>
             </div>
             <p class="mt-1 text-[11px] text-slate-500">
-              Selected: <span class="capitalize">{{ type().replace(/([A-Z])/g, ' $1').trim() }}</span>
+              Selected: <span class="capitalize">{{ formatTypeLabel(type()) }}</span>
             </p>
           </div>
 

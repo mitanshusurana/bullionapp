@@ -251,7 +251,7 @@ export class DaybookPageComponent {
         this.data.set({
           date: this.date(),
           entries: [],
-          totals: { sale: 0, purchase: 0, cashin: 0, cashout: 0, net: 0 },
+          totals: { sale: 0, purchase: 0, cashin: 0, cashout: 0, rateCutsales: 0, ratecutPurchase: 0, net: 0 },
         });
         this.updateFilteredEntries();
       },
