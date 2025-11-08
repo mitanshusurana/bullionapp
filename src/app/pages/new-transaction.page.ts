@@ -529,6 +529,10 @@ export class NewTransactionPageComponent {
         return `${base} ${this.type() === "metalin" ? active + " bg-cyan-600" : inactive + " bg-white"}`;
       case "metalout":
         return `${base} ${this.type() === "metalout" ? active + " bg-fuchsia-600" : inactive + " bg-white"}`;
+      case "rateCutsales":
+        return `${base} ${this.type() === "rateCutsales" ? active + " bg-teal-600" : inactive + " bg-white"}`;
+      case "ratecutPurchase":
+        return `${base} ${this.type() === "ratecutPurchase" ? active + " bg-orange-600" : inactive + " bg-white"}`;
     }
   }
 
