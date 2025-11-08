@@ -30,8 +30,12 @@ export class PartyService {
   readonly parties = this._parties.asReadonly();
   readonly allNames = computed(() =>
     Array.from(
-      new Set(this._parties().map(p => p.name).filter(n => typeof n === "string"))
-    ).sort((a, b) => a.localeCompare(b))
+      new Set(
+        this._parties()
+          .map((p) => p.name)
+          .filter((n) => typeof n === "string"),
+      ),
+    ).sort((a, b) => a.localeCompare(b)),
   );
   private lastNamesFetch = 0;
 
@@ -51,7 +55,7 @@ export class PartyService {
       next: (saved) => {
         if (!saved) return;
         const idx = this._parties().findIndex(
-          p => p.name.toLowerCase() === party.name.toLowerCase()
+          (p) => p.name.toLowerCase() === party.name.toLowerCase(),
         );
         if (idx !== -1) {
           const parties = [...this._parties()];
@@ -60,7 +64,7 @@ export class PartyService {
           this.persist(parties);
         }
       },
-      error: () => this.sync.enqueue("POST", `${API_BASE}/parties`, party)
+      error: () => this.sync.enqueue("POST", `${API_BASE}/parties`, party),
     });
 
     this.ensureFreshNames();
@@ -69,12 +73,12 @@ export class PartyService {
 
   findByName(name: string) {
     const v = (name || "").toLowerCase();
-    return this._parties().find(p => p.name.toLowerCase() === v);
+    return this._parties().find((p) => p.name.toLowerCase() === v);
   }
 
   existsName(name: string) {
     const v = (name || "").trim().toLowerCase();
-    return !!v && this.allNames().some(n => n.toLowerCase() === v);
+    return !!v && this.allNames().some((n) => n.toLowerCase() === v);
   }
 
   ensureFreshNames() {
@@ -90,7 +94,7 @@ export class PartyService {
         this._parties.set(valid);
         this.persist(valid);
         this.lastNamesFetch = Date.now();
-      }
+      },
     });
   }
 
@@ -99,11 +103,15 @@ export class PartyService {
       const raw = localStorage.getItem(STORAGE_KEY);
       const parsed = raw ? JSON.parse(raw) : [];
       return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
-    } catch { return []; }
+    } catch {
+      return [];
+    }
   }
 
   private persist(list: Party[]) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch {}
   }
 
   fetchParties() {

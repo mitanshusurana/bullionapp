@@ -83,7 +83,13 @@ export class TransactionService {
         acc[t.type] += t.amount || 0;
       }
     }
-    acc.net = acc.sale - acc.purchase + acc.cashin - acc.cashout + acc.rateCutsales - acc.ratecutPurchase;
+    acc.net =
+      acc.sale -
+      acc.purchase +
+      acc.cashin -
+      acc.cashout +
+      acc.rateCutsales -
+      acc.ratecutPurchase;
     return acc;
   });
 
