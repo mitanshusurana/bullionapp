@@ -11,7 +11,7 @@ export interface Party {
 
 const STORAGE_KEY = "gold-pos:parties";
 const TEN_MIN = 10 * 60 * 1000;
-export const API_BASE = "http://192.168.1.32:8080/api";
+export const API_BASE = "https://goldledgerbackend.onrender.com/api";
 /** Return a UTC ISO string that equals the current India (Asia/Kolkata) wall-clock time.
  *
  * This shifts the current instant by +5.5 hours and returns an ISO string with Z.
