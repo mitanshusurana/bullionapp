@@ -79,6 +79,18 @@ import { TransactionDetailModalComponent } from "../components/transaction-detai
               {{ d.totals.cashout | currency: "INR" : "symbol" : "1.0-0" }}
             </p>
           </div>
+          <div class="rounded-xl bg-white shadow-soft p-4">
+            <p class="text-xs text-slate-500">Rate Cut Sales</p>
+            <p class="mt-1 text-xl font-semibold">
+              {{ d.totals.rateCutsales | currency: "INR" : "symbol" : "1.0-0" }}
+            </p>
+          </div>
+          <div class="rounded-xl bg-white shadow-soft p-4">
+            <p class="text-xs text-slate-500">Rate Cut Purchases</p>
+            <p class="mt-1 text-xl font-semibold">
+              {{ d.totals.ratecutPurchase | currency: "INR" : "symbol" : "1.0-0" }}
+            </p>
+          </div>
           <div class="rounded-xl bg-white shadow-soft p-4 col-span-2">
             <p class="text-xs text-slate-500">Net</p>
             <p
