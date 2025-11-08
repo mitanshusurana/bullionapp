@@ -89,9 +89,23 @@ import { PartyService } from "../services/party.service";
               >
                 Metal Out
               </button>
+              <button
+                type="button"
+                (click)="setType('rateCutsales')"
+                [class]="segClass('rateCutsales')"
+              >
+                Rate Cut Sale
+              </button>
+              <button
+                type="button"
+                (click)="setType('ratecutPurchase')"
+                [class]="segClass('ratecutPurchase')"
+              >
+                Rate Cut Buy
+              </button>
             </div>
             <p class="mt-1 text-[11px] text-slate-500">
-              Selected: <span class="capitalize">{{ type() }}</span>
+              Selected: <span class="capitalize">{{ type().replace(/([A-Z])/g, ' $1').trim() }}</span>
             </p>
           </div>
 
