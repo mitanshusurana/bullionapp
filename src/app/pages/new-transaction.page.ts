@@ -623,8 +623,9 @@ export class NewTransactionPageComponent {
       const cashIn = Number(this.form.controls.cashIn.value) || 0;
       const cashOut = Number(this.form.controls.cashOut.value) || 0;
       const balance =
-        Number(this.form.controls.balance.value) ||
-        amount - (t === "sale" || t === "rateCutsales" ? cashIn : cashOut);
+        t === "sale" || t === "rateCutsales"
+          ? +(amount - cashIn).toFixed(2)
+          : +(cashOut - amount).toFixed(2);
 
       this.tx.add({
         type: t,
@@ -642,9 +643,10 @@ export class NewTransactionPageComponent {
         balance,
       });
     } else if (t === "cashin" || t === "cashout") {
-      const amount = Number(this.form.controls.amount.value) || 0;
-      const balance = t === "cashin" ? -1 * amount : amount;
-      this.tx.add({ type: t, name, date, note, amount, balance });
+      const rawAmount = Number(this.form.controls.amount.value) || 0;
+      const signedAmount = t === "cashin" ? -rawAmount : rawAmount;
+      const balance = signedAmount;
+      this.tx.add({ type: t, name, date, note, amount: signedAmount, balance });
     } else {
       // metal in/out
       const grossWt = Number(this.form.controls.grossWt.value) || 0;
